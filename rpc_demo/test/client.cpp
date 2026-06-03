@@ -4,7 +4,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
-#include "./msg/arg.hpp"
+#include "../src/msg/arg.hpp"
 
 int echo(std::string str, int n);
 

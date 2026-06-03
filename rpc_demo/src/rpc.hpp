@@ -4,7 +4,7 @@
 #include <tuple>
 #include <unordered_map>
 
-#include "../async_/async_.hpp"
+#include "../../async_/async_.hpp"
 #include "./msg/arg.hpp"
 
 /*
@@ -103,6 +103,4 @@ task<void> rpc_task(int fd, std::string serialized_data) {
     co_return;
 }
 
-
-#include "./msg/args.pb.cc"
 #endif

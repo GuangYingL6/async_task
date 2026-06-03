@@ -1,6 +1,5 @@
 #ifndef __ASYNC_MUTEX_CPP__
 #define __ASYNC_MUTEX_CPP__
-//#include <iostream>
 #include <optional>
 #include <coroutine>
 #include <mutex>
@@ -81,7 +80,6 @@ public:
             }
         }
         _is_unlock = false;
-        //std::cout << "get lock" << std::endl;
         co_return;
     }
 
@@ -94,7 +92,6 @@ public:
                 loop::make().lock()->add_task(handle);
             _is_unlock = true;
         }
-        //std::cout << "unlock" << std::endl;
     }
 };
 

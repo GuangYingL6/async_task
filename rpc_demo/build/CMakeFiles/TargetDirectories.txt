@@ -1,0 +1,3 @@
+/home/guangying/vscode/20test/src/rpc_demo/build/CMakeFiles/app.dir
+/home/guangying/vscode/20test/src/rpc_demo/build/CMakeFiles/edit_cache.dir
+/home/guangying/vscode/20test/src/rpc_demo/build/CMakeFiles/rebuild_cache.dir

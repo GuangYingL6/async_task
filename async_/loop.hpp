@@ -6,7 +6,6 @@
 #include <arpa/inet.h>
 #include <strings.h>
 
-#include <iostream>
 #include <stop_token>
 #include <coroutine>
 #include <deque>
@@ -144,7 +143,6 @@ public:
                         ready_tasks.tasks.pop_front();
                         lock.unlock();
                         if (handle && !handle.done()) {
-                            std::cout << "run handle " << handle.address() << std::endl;
                             handle.resume();
                         }
                         lock.lock();
@@ -161,9 +159,7 @@ public:
                             auto handle{std::move(str.ready_tasks.tasks.back())};
                             str.ready_tasks.tasks.pop_back();
                             lock.unlock();
-                            std::cout << "task [" << id << "] -> [" << std::this_thread::get_id() << "]" << std::endl;
                             if (handle && !handle.done()) {
-                                std::cout << "run handle " << handle.address() << std::endl;
                                 handle.resume();
                             }
                             break;
@@ -191,7 +187,6 @@ public:
                                 use_epoll.store(false);
                                 if (!ready_deq.empty()) {
                                     for (auto &handle : ready_deq) {
-                                        std::cout << "epoll back, add new task" << std::endl;
                                         add_task(handle);
                                     }
                                     break;
@@ -208,7 +203,6 @@ public:
                         use_epoll.store(false);
                         if (!ready_deq.empty()) {
                             for (auto &handle : ready_deq) {
-                                std::cout << "epoll back, add new task" << std::endl;
                                 add_task(handle);
                             }
                         }
@@ -266,7 +260,6 @@ task<ssize_t> async_read(int fd, char *data, ssize_t size) {
     ssize_t count = 0;
     bool wait = false;
     while (size > count) {
-        std::cout << "async_read" << std::endl;
         if (wait)
             co_await to_epoll_in{fd};
         ssize_t n = recv(fd, data + count, size - count, MSG_NOSIGNAL);
@@ -282,7 +275,6 @@ task<ssize_t> async_read(int fd, char *data, ssize_t size) {
             } else if (errno == EINTR) {
                 wait = true;
             } else {
-                std::cout << "errno read: " << errno << std::endl;
                 co_return -1;
             }
         } else {
@@ -301,7 +293,6 @@ task<ssize_t> async_write(int fd, const char *data, ssize_t size) {
     while (size > count)
     {
         // 当前无数据可读，退出循环，等待下次 EPOLLIN
-        std::cout << "async_write" << std::endl;
         if (wait)
             co_await to_epoll_out{fd};
         ssize_t n = send(fd, data + count, size - count, MSG_NOSIGNAL);
@@ -338,7 +329,8 @@ public:
     async_listen() {}
     ~async_listen() {
         source.request_stop();
-        send_accept_task_ptr.get()->release();
+        send_accept_task_ptr.get()->handle.resume();
+        loop::make().lock()->epollfd.del_event(listenfd);
     }
     int bind_listen(const std::string_view &ip, int port)
     {
@@ -346,7 +338,6 @@ public:
         int opt = 1;
         if (setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)))
             ;
-        // std::cout << "err: setsockopt();" << std::endl;
 
         struct sockaddr_in addr;
         bzero(&addr, sizeof(addr));
@@ -417,11 +408,9 @@ public:
     {
 
         socklen_t clientL = sizeof(client);
-        std::cout << "async_accept" << std::endl;
         int connfd = accept(listenfd, (struct sockaddr *)&client, &clientL);
         while (connfd < 0)
         {
-            std::cout << "async_accept" << std::endl;
             co_await wait_accept{*this};
             connfd = accept(listenfd, (struct sockaddr *)&client, &clientL);
             if (connfd > 0) {
