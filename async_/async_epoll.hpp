@@ -1,5 +1,5 @@
-#ifndef __ASYNC_EPOLL_CPP__
-#define __ASYNC_EPOLL_CPP__
+#ifndef _ASYNC_EPOLL_CPP__
+#define _ASYNC_EPOLL_CPP__
 #include <sys/epoll.h>
 #include <fcntl.h>
 #include <sys/socket.h>

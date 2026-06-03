@@ -1,5 +1,5 @@
-#ifndef __TASK_CPP__
-#define __TASK_CPP__
+#ifndef _TASK_CPP__
+#define _TASK_CPP__
 #include <optional>
 #include <coroutine>
 

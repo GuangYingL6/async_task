@@ -1,5 +1,5 @@
-#ifndef __ASYNC_MUTEX_CPP__
-#define __ASYNC_MUTEX_CPP__
+#ifndef _ASYNC_MUTEX_CPP__
+#define _ASYNC_MUTEX_CPP__
 #include <optional>
 #include <coroutine>
 #include <mutex>
@@ -95,7 +95,7 @@ public:
     }
 };
 
-struct async_conditionan_variable
+struct async_conditional_variable
 {
     std::mutex que_mtx;
     std::deque<std::coroutine_handle<>> wait_que;
@@ -115,7 +115,7 @@ struct async_conditionan_variable
     }
 
 public:
-    async_conditionan_variable() {}
+    async_conditional_variable() {}
 
     struct add_wait_que
     {
@@ -126,8 +126,8 @@ public:
         }
         void await_resume() { return; }
 
-        add_wait_que(async_conditionan_variable &cv) : _cv(cv) {}
-        async_conditionan_variable &_cv;
+        add_wait_que(async_conditional_variable &cv) : _cv(cv) {}
+        async_conditional_variable &_cv;
     };
 
     template <typename CallFunc>

@@ -15,12 +15,12 @@ find_package(Protobuf REQUIRED)
 # -------------------------------------------------------
 # 1. 如果有 .proto 文件，让 CMake 自动编译生成 .pb.cc / .pb.h
 # -------------------------------------------------------
-#[[
 set(PROTO_FILES
     src/msg/args.proto          # 列出 proto 文件（可多个）
 )
+
 protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_FILES})
-]]#
+
 # -------------------------------------------------------
 # 2. 收集所有源文件（包含生成的 protobuf 文件）
 # -------------------------------------------------------
@@ -38,7 +38,9 @@ add_executable(app ${ALL_SRCS} ${PROTO_SRCS})
 
 # 让编译器能找到生成的 protobuf 头文件
 target_include_directories(app PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
-target_include_directories(app PRIVATE ${PROTOBUF_INCLUDE_DIRS})
+target_include_directories(app PRIVATE ${PROTOBUF_INCLUDE_DIRS}
+                                       ${PROJECT_SOURCE_DIR}/../async_
+                                       ${PROJECT_SOURCE_DIR}/src)
 
 # 链接 Protobuf 库
 target_link_libraries(app PRIVATE ${PROTOBUF_LIBRARIES})

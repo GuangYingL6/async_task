@@ -1,5 +1,5 @@
-#ifndef __RPC_HPP__
-#define __RPC_HPP__
+#ifndef _RPC_HPP__
+#define _RPC_HPP__
 #include <string>
 #include <tuple>
 #include <unordered_map>
@@ -7,7 +7,7 @@
 #include "../../async_/async_.hpp"
 #include "./msg/arg.hpp"
 
-/*
+
 template <typename = void>
 struct func_args_list;
 
@@ -18,7 +18,7 @@ struct func_args_list<Ret(Args...)> {
         return unpack<Args...>(args);
     }
 };
-*/
+
 
 
 class call_bast {

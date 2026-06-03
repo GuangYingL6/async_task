@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/app.dir/src/msg/args.pb.cc.o CMakeFiles/app.dir/src/server.cpp.o -o ../output/app  /usr/lib/x86_64-linux-gnu/libprotobuf.so 

@@ -4,7 +4,7 @@
 
 async_mutex mtx{};
 
-async_conditionan_variable cv{};
+async_conditional_variable cv{};
 
 struct server
 {

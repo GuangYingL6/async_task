@@ -1,3 +1,5 @@
+#ifndef _ARG_HPP__
+#define _ARG_HPP__
 #include "args.pb.h"
 #include <google/protobuf/wrappers.pb.h>
 #include <google/protobuf/any.pb.h>
@@ -108,3 +110,4 @@ std::tuple<ArgsType...> unpack(const ArgumentList& args) {
     constexpr size_t N = std::tuple_size_v<Tuple>;
     return std::move(_unpack<Tuple>(args, std::make_index_sequence<N>{}));
 }
+#endif

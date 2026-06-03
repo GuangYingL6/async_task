@@ -1,5 +1,5 @@
-#ifndef __LOOP_CPP__
-#define __LOOP_CPP__
+#ifndef _LOOP_CPP__
+#define _LOOP_CPP__
 
 #include <sys/socket.h>
 #include <sys/stat.h>
