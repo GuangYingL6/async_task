@@ -47,7 +47,7 @@ struct server
                 co_await async_read(client, (char*)(&size), sizeof(size));
                 std::string buff(1024, '\0');
                 for (int n{0}; n < size; ) {
-                    int ret = (co_await async_read(client, buff.data(), buff.size())).value();
+                    int ret = (co_await async_read(client, buff.data() + n, buff.size())).value();
                     std::cout << "rn: " << ret << std::endl;
                     if (ret > 0) {
                         n += ret;

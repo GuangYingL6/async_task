@@ -28,7 +28,10 @@ public:
     virtual task<void> call(int fd, const ArgumentList &) = 0;
 };
 
-std::unordered_map<std::string, call_bast *> mp;
+static auto& get_rpc_map() {
+    static std::unordered_map<std::string, call_bast *> mp;
+    return mp;
+}
 
 template <typename T>
 task<void> send_return(int fd, T&& ret) {
@@ -55,7 +58,7 @@ task<void> _call(int fd, Ret fun(Args...), const ArgumentList &args)
 #define DEF(name)                                                          \
     class rpc_##name : public call_bast                                    \
     {                                                                      \
-        rpc_##name() { mp[#name] = this; }                                 \
+        rpc_##name() { get_rpc_map()[#name] = this; }                      \
         static rpc_##name const *ptr;                                      \
                                                                            \
     public:                                                                \
@@ -68,7 +71,6 @@ task<void> _call(int fd, Ret fun(Args...), const ArgumentList &args)
     };                                                                     \
     rpc_##name const *rpc_##name::ptr = new rpc_##name();
 
-
 task<void> ProcessArgs(int fd, const std::string &data)
 {
     Request req;
@@ -76,7 +78,7 @@ task<void> ProcessArgs(int fd, const std::string &data)
         throw "err[main.cpp 39]";
         co_return;
     }
-    if (auto it = mp.find(req.url()); it != mp.end()) {
+    if (auto it = get_rpc_map().find(req.url()); it != get_rpc_map().end()) {
         co_await it->second->call(fd, req.argslist(0));
     }
 }

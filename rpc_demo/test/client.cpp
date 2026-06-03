@@ -35,7 +35,7 @@ auto _rpc_call(const std::string& func, Args... args) {
     recv(sock, (char *)(&size), sizeof(size), 0);
     std::string buf(1024, '\0');
     for (int n{0}; n < size; ) {
-        int ret = recv(sock, buf.data(), buf.size(), 0);
+        int ret = recv(sock, buf.data() + n, buf.size(), 0);
         std::cout << "rn: " << ret << std::endl;
         if (ret > 0) {
             n += ret;
@@ -56,5 +56,3 @@ int main()
     _rpc_call<decltype(echo)>("echo", std::string("echo"), 2);
     return 0;
 }
-
-#include "./msg/args.pb.cc"
