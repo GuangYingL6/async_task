@@ -26,9 +26,7 @@ protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_FILES})
 # -------------------------------------------------------
 file(GLOB_RECURSE ALL_SRCS
     src/*.cpp
-    src/*.cc
     src/msg/*.cpp
-    src/msg/*.cc
 )
 
 # -------------------------------------------------------
@@ -39,8 +37,10 @@ add_executable(app ${ALL_SRCS} ${PROTO_SRCS})
 # 让编译器能找到生成的 protobuf 头文件
 target_include_directories(app PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 target_include_directories(app PRIVATE ${PROTOBUF_INCLUDE_DIRS}
-                                       ${PROJECT_SOURCE_DIR}/../async_
                                        ${PROJECT_SOURCE_DIR}/src)
+
+add_subdirectory(../async_ async_lib)
+target_link_libraries(app PRIVATE async_lib)
 
 # 链接 Protobuf 库
 target_link_libraries(app PRIVATE ${PROTOBUF_LIBRARIES})
