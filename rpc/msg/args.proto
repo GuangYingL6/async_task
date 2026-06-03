@@ -1,0 +1,17 @@
+syntax = "proto3";
+import "google/protobuf/any.proto";
+
+// 包裹一个参数：用 Any 存储具体的值
+message Argument {
+  google.protobuf.Any value = 1;
+}
+
+// 参数列表
+message ArgumentList {
+  repeated Argument args = 1;
+}
+
+message Request {
+  string url = 1;
+  repeated ArgumentList argslist = 2;
+}
